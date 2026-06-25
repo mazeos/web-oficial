@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 96%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 79 100% 64%;
+    --primary-foreground: 0 0% 0%;
+    --primary-glow: 78 100% 81%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 54%;
+
+    --accent: 79 100% 64%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 13%;
+    --input: 0 0% 13%;
+    --ring: 79 100% 64%;
+
+    --radius: 1rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(0 0% 5%), hsl(0 0% 0%));
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 8%), hsl(0 0% 3%), hsl(0 0% 0%));
+    --gradient-glow: radial-gradient(circle at 50% 0%, hsl(79 100% 64% / 0.15), transparent 70%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 8% / 0.5), hsl(0 0% 5% / 0.3));
+    
+    --shadow-glow: 0 0 60px hsl(79 100% 64% / 0.3);
+    --shadow-card: 0 20px 60px hsl(0 0% 0% / 0.8);
+    
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: #000000; overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold tracking-tight;
+  }
+
+  /* Safe area padding for devices with notch */
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: max(0px, env(safe-area-inset-left));
+      padding-right: max(0px, env(safe-area-inset-right));
+    }
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-[#c5ff49] via-[#c5ff49] to-[#a8ff3d] bg-clip-text text-transparent;
+  }
+
+  .glow-effect {
+    filter: drop-shadow(0 0 20px hsl(79 100% 64% / 0.5));
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-xl bg-card/30 border border-border/50;
+  }
+
+  /* Elegant hover transitions */
+  .hover-elegant {
+    @apply transition-all duration-700;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .hover-elegant:hover {
+    transform: scale(1.02) translateY(-4px);
+  }
+
+  .hover-lift {
+    @apply transition-all duration-500;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* === Sistema de marca Maze: firma metálica + glow === */
+.text-metal {
+  background: linear-gradient(135deg, #5E7E18, #C5FF49, #EBFFC2, #C5FF49, #4F6E12);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sec-glow {
+  background: radial-gradient(60% 55% at 50% 0%, rgba(197, 255, 73, 0.08), transparent 70%);
+}
+
+/* Degradé metálico en botones y acentos lima */
+button.bg-primary,
+a.bg-primary,
+.bg-primary.rounded-full,
+.bg-primary.rounded-lg,
+.bg-primary.rounded-xl {
+  background-image: linear-gradient(135deg, #5E7E18, #C5FF49, #EBFFC2, #C5FF49, #4F6E12);
+}
+
+/* Cards Carbon + tinte Moss en hover (sistema Maze) */
+.card-carbon {
+  background-color: #151515;
+  transition: var(--transition-smooth);
+}
+.card-carbon:hover {
+  background-color: #1E2A12;
+}
+
+/* === Metalico animado (seccion precios) === */
+@property --metal-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Borde metalico girando alrededor de la card */
+.metal-border { --mb: 1.5px; position: relative; }
+.metal-border::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--mb));
+  border-radius: inherit;
+  padding: var(--mb);
+  background: conic-gradient(from var(--metal-angle),
+    #2a3a0a, #5E7E18, #C5FF49, #EBFFC2, #ffffff, #EBFFC2, #C5FF49, #4F6E12, #2a3a0a);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: metal-spin 22s linear infinite;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.metal-border-strong { --mb: 2px; }
+.metal-border-strong::before { opacity: 1; animation-duration: 18s; }
+@keyframes metal-spin { to { --metal-angle: 360deg; } }
+
+/* Sheen metalico recorriendo texto (precios y titulo) */
+.text-metal-anim {
+  background: linear-gradient(110deg,
+    #4F6E12 0%, #C5FF49 30%, #EBFFC2 45%, #ffffff 50%, #EBFFC2 55%, #C5FF49 70%, #4F6E12 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: metal-sheen 18s linear infinite;
+}
+@keyframes metal-sheen {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -60% 0; }
+}
+
+/* Destello metalico que cruza los botones */
+.metal-sheen-btn { position: relative; overflow: hidden; }
+.metal-sheen-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%);
+  transform: translateX(-160%);
+  animation: btn-sheen 16s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes btn-sheen { 0% { transform: translateX(-160%); } 55%, 100% { transform: translateX(160%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .metal-border::before, .text-metal-anim, .metal-sheen-btn::after { animation: none; }
+}
